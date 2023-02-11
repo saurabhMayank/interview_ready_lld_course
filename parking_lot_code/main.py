@@ -23,4 +23,31 @@ class Admin(Account):
     """
     Admin Class is a subclass of account class
     """
-    pass
+    # this init can also be removed as the current classes init and its
+    # parent init are same. So when python is executing the code
+    # if in current class -> python will not find the init -> then it 
+    # will execute its parent's init method
+    def __init__(self, username: str, password: str):
+        super().__init__(username, password)
+    
+    # passed here ParkingLot ka instance because we are treating ParkingLot as a singleton class
+    # singleton class cannot be instantiated, it has a single static instance
+    def add_parking_floor(self, parking_floor: ParkingFloor, parking_lot:ParkingLot) -> bool:
+        """
+        Function to add parking floor
+        """
+        pass
+
+    def add_parking_spot(self, parking_floor: ParkingFloor, parking_spot: ParkingSpot) -> bool:
+        """
+        Function to add parking spot
+        """
+        pass
+
+    def add_parking_display_board(self, parking_floor: ParkingFloor, display_board: ParkingDisplayBoard) -> bool:
+        """
+        Function to add parking spot
+        """
+        pass
+    
+    
