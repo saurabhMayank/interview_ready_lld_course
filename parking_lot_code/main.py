@@ -50,4 +50,38 @@ class Admin(Account):
         """
         pass
     
+    def add_entrance_panel(self, entrance_panel: EntrancePanel) -> bool:
+        """
+        Function to add entrance panel
+        """
+        pass
     
+    def add_exit_panel(self, exit_panel: ExitPanel):
+        """
+        Function to add exit panel
+        """
+        pass
+
+class ParkingAttendant(Account):
+    """
+    Parking attendant class is a subclass of account class
+    """
+    # this init can also be removed as the current classes init and its
+    # parent init are same. So when python is executing the code
+    # if in current class -> python will not find the init -> then it 
+    # will execute its parent's init method
+    def __init__(self, username: str, password: str):
+        super().__init__(username, password)
+    
+    def process_parking_tickets(p: ParkingTicket) -> bool:
+        """
+        Process Parking ticket
+        """
+        pass
+
+
+class ParkingLot:
+    """
+    Main class Parking Lot of this system
+    This is a singleton class means that there is only one instance of ParkingLot in this whole system
+    """
