@@ -214,7 +214,44 @@ class EntrancePanel:
    Class defining details of Entrance Panel
    """
 
-   def __init__(self, id: str)
+   def __init__(self, id:str, global_parking_display_board:ParkingDisplayBoard):
+        self.id = id
+        self.global_parking_display_board = global_parking_display_board
+    
+   def issue_parking_ticket(self, vehicle:Vehicle):
+        pass
+
+   def set_parking_display_board(self, global_parking_display_board:ParkingDisplayBoard):
+        pass
+   
+
+class ParkingFloor:
+  def __init__(self, id:str):
+    self.id = id
+    # key => id of parking spot
+    # value => parking spot instance
+    # <key, value> hashmap of parking spot
+    self.parking_spot = {}
+    # parking display board of the floor
+    self.display_board = ParkingDisplayBoard()
+    # global parking display board
+    self.global_parking_display_board = ParkingDisplayBoard()
+
+
+
+def add_parking_spot(self, spot):
+    pass
+
+
+def assign_vehicleToSpot(self, vehicle, spot):
+    pass
+
+
+def free_spot(self, spot):
+    pass
+
+
+
 
 
 class ParkingLot:
@@ -222,3 +259,30 @@ class ParkingLot:
     Main class Parking Lot of this system
     This is a singleton class means that there is only one instance of ParkingLot in this whole system
     """
+    __instance = None
+
+    def __new__(cls):
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+        return cls.__instance
+    
+    def __init__(self, name: str):
+        self.name = name
+        # hashmap
+        # key -> string, entrance_panel id
+        # val -> entrance_panel instance
+        self.entrances = {}
+        # same as above for exist panels and parking floor variables
+        self.exits = {}
+        self.parking_floor = {}
+        self.global_parking_display_board = ParkingDisplayBoard()
+    
+
+    def add_entrance_panel(entrance_panel:EntrancePanel):
+        pass
+    
+    def add_entrance_panel(exit_panel:ExitPanel):
+        pass
+
+    def add_floor(floor:ParkingFloor):
+        pass
