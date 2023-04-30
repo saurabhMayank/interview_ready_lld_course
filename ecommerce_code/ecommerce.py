@@ -22,14 +22,32 @@ class Cart:
         self.item_list.append(item)
 
 
+class OrderDetails:
+    """
+    Basic Details of the Order common to all types of order so it can be used in
+    different classes
+    One method could more be done was
+    => Making a abstractclass called OrderType
+    => Then inherting Order and ReturnOrder from OrderType
+    => Using the abstract ParentClass OrderType wherever needed and on runtime
+    => Pass the appropriate run time class
+
+    But this will pose the problem of Fat Interfaces. Too much details 
+    will be passed using the instance in other classes such as delivery class which is not needed
+    Interface segragation principle of Solid principle aims to avoid passing too much details
+    to another classes which is not needed
+    """
+    def __init__(self, source_add, destination_add):
+        self.order_id = uuid.uuid4()
+        self.source_address = source_add
+        self.destination_address = destination_add
+
 class Order:
     """
     Class for Order
     """
     def __init__(self, item_list, source_add, destination_add):
-        self.item_list = item_list
-        self.order_id = uuid.uuid4()
-        self.destination_add = destination_add
+        self.order_details = OrderDetails(source_add, destination_add)
         self.source_add = source_add
         self.amount = self.total_amount(item_list)
         self.order_status = OrderStatus
@@ -55,9 +73,11 @@ class Order:
         On Every status change -> making the order class know that there is a status change
         Order -> observer
         OrderStatus -> Observable
+
+        Observing the Order Status
         Based on change in status in OrderStatus -> Do something in the Order
         """
-        if order_status == self.order_status.PAYMENT_COMPLETE:
+        if order_status == self.order_status.PAYMENT_COMPLETE.name:
             # create new delivery for every item of the order
             # for the simplicty of code
             # in reality -> delivery for a order will depend on lot of things
@@ -69,7 +89,7 @@ class Order:
                 delivery = Delivery(item_dict, self.order_id)
                 self.deliveries.append(delivery)
         
-        if order_status == self.order_status.COMPLETED:
+        if order_status == self.order_status.COMPLETED.name:
             # order status is completed
             # generate an invoice
             # for every item seperately for simplicity
@@ -85,7 +105,39 @@ class ReturnOrder:
     Return Order and Order are seperate because there are some behaviours which are different
     in both the classes
     So to avoid tight coupling between these two cases -> we have made two seperate classes
+    Concept of Order and Return order is different
+    Its best to keep both of them seperate
     """
+
+    def __init__(self, items_list, source_add, destination_add):
+        self.order_details = OrderDetails(source_add, destination_add)
+        self.items_list = items_list
+        self.amount_refunded = self.calc_amount_refunded()
+    
+    def calc_amount_refunded():
+        total_amount = 0
+        for item in self.items_list:
+            total_amount = total_amount + item.get_price()
+        
+        return total_amount
+
+
+
+"""
+Note: It’s important to note that calling an enumeration with a member’s value as an argument can make you 
+feel like you’re instantiating the enumeration. However, enumerations can’t be instantiated, as you already know
+"""
+
+"""
+Accessing Enum
+class Semaphore(Enum):
+    RED = 1
+    YELLOW = 2
+    GREEN = 3
+
+Semaphore.RED.name -> 'RED'
+Semaphore.RED.value -> 1
+"""
 
 
 class OrderStatus(Enum):
@@ -99,11 +151,11 @@ class Delivery:
     """
     Class for Delivery
     """
-    def __init__(self, item_dict, order_id):
+    def __init__(self, item_dict, order_details):
         self.delivery_id = uuid.uuid4()
         self.item_dict = item_dict
         self.status = DeliveryStatus
-        self.order_id = order_id
+        self.order_details = order_details
 
 class DeliveryStatus(Enum):
     """
@@ -120,6 +172,7 @@ class Payment:
     def __init__(self):
         self.payment_id = uuid.uuid4()
         self.payment_method = PaymentMethods
+        self.payment_status = PaymentStatus
 
 class PaymentMethods(Enum):
     """
@@ -150,7 +203,6 @@ class Address:
     """
     Class defining address object
     """
-
     def __init__(self, street: str, city: str, state: str, zip_code: str, country: str):
         self.street = street
         self.city = city
@@ -177,6 +229,16 @@ class Customer:
         self.email = email
     
 
+    def return_order(self, item_list):
+        # just created random addresses here for simplicity
+        # but for a customer, we can also store list of addresses
+        # and pass any address from it
+        # for sender address we can keep address of amazon in a constant
+        dest_add = Address("abc", "def", "ijk", 123, "india")
+        source_add = Address("abc", "def", "ijk", 123, "aus")
+        return_order_obj = ReturnOrder(item_list, source_add, dest_add)
+
+
     def view_item(self, name: str):
         item = Item(name)
         return item.get_item()
@@ -186,7 +248,7 @@ class Customer:
         Convert the single item in an order
         """
         item_list = [item]
-        # just created random addresses here
+        # just created random addresses here for simplicity
         # but for a customer, we can also store list of addresses
         # and pass any address from it
         # for sender address we can keep address of amazon in a constant
