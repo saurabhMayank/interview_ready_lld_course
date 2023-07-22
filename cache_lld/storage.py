@@ -50,6 +50,12 @@ class DLL:
     def attach_node_at_tail(self, node: DLLNode):
         pass
 
+    def move_head(self):
+        pass
+
+    def get_current_head(self):
+        pass
+
 
 
 class DLLNode:
@@ -82,5 +88,47 @@ class LRUEvictionPolicy(IEvictionPolicy):
         # address mapper of each node
         # DLLNode object contains address of the node
         self.pos_mapper = {}
+        self.cache_size = 4
+    
+    def key_accessed(self, key: str):
+        """
+        Check if key is present in the pos mapper or not
+        Case 1:- 
+        If key is present in the pos mapper => node is already present
+        Detach node from current pos. 
+        Attach node at the end.
+
+        Case 2:-
+        If key is not present in the pos mapper => node is not present
+        Create a new node
+        Check if the current cache size if full or not. Apply restriction on map size
+        Put the {key:DLLNode} in the mapper.
+        Attach the node at the end.
+
+        """
+
+        if key in self.pos_mapper:
+            self.dll.detach_node(key)
+        elif key not in self.pos_mapper:
+            # check if the current size allows addition or need to evict a key
+            new_node = DLLNode()
+            if self.pos_mapper.size() == self.cache_size:
+                # cache is full
+                self.evict_key()
+            self.pos_mapper[key] = new_node
+        
+        # attach node -> at the end
+        self.dll.attach_node_at_tail(new_node)
+    
+    def evict_key(self):
+        """
+        Remove key at head from the mapper
+        Move head
+        """
+        key = self.dll.get_current_head()
+        pos_mapper.pop(key)
+        self.dll.move_head()
+        
+
 
 
