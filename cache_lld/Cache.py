@@ -1,9 +1,9 @@
 
-# Creational Pattern Factory used in this
+# Creational Pattern =>  Factory used in this Question
 
 
-# this Creator method does not need an interface implementation
-# this is fixed for all the types of cache
+# storage is fixed for all types of cache
+# dont need a factory pattern implementation for this
 class Storage:
 
     def __init__(self, capacity:int):
@@ -61,7 +61,10 @@ class DLL:
         # make dummy head and tail nodes
         # add the node before dummy tail
         pass
-
+    
+    # for better implementation code wise
+    # making head dummy node and putting the Least Recently Used
+    # at the next of head -> Dummy node concept helps to avoid unknown errors
     def move_head(self):
         pass
 
@@ -157,7 +160,8 @@ class LRUEvictionPolicy(IEvictionPolicy):
             # Doubt in this ??
             # there should be also be a code to store the key in the hashmap created in Storage class
             # by checking its size here
-            # Because when a key value pair stored in the cache then also it is accessed
+            # If key is not present in the cache and we are storing it in the DLL which is implemented
+            # for the eviction policy -> should new node key and value -> stored in Hashmap of storage class
 
 
             new_node = DLLNode()
@@ -210,9 +214,34 @@ class FIFOEvictionPolicy(IEvictionPolicy):
 
     def evict_key(self):
         # first in first out -> first data that is accessed needs to be removed
+        # the node will be inserted in the head and after that
         key = self.dll.get_current_head()
+        # remove the key from the pos mapper as it is no longer in the DLL
+        # so no need to store its address
         pos_mapper.pop(key)
-        self.dll.move_head()
+        # For better implementation -> head and tail are made as dummy node
+        # the head next node will have the first node
+        # self.dll.move_head()
 
 
+
+class EvictionPolicyFactory:
+    def __init__(self, policy_val: str):
+        self.policy_val = policy_val
+    
+
+    def get_eviction_policy(self):
+        if self.policy_val == "lru":
+            return LRUEvictionPolicy()
+        elif self.policy_val == "fifo":
+            return FIFOEvictionPolicy()
+        else:
+            # if no policy val corresponding to exisiting policies
+            # provided
+            return None
+
+
+# main class of cache
+class Cache:
+    
 
