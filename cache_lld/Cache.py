@@ -243,5 +243,24 @@ class EvictionPolicyFactory:
 
 # main class of cache
 class Cache:
+    """
+    Main Cache class. 
+    Cache has 2 components
+    i) Storage -> Hashmap to store the values of cache
+    ii) EvictionPolicyImplementation -> Eviction Policy for cache
+
+    Cache does 2 operations
+    i) Put {key, value} in the cache
+    ii) Retrieve value based on key from the cache
+    """
+
+    def __init__(self, eviction_policy: IEvictionPolicy, storage: Storage):
+        self.eviction_policy = eviction_policy
+        self.storage = storage
+    
+    # need to put values in the cache
+    def put(self, key: str, val: str):
+        if(self.storage.)
+
     
 
