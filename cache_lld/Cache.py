@@ -14,9 +14,9 @@ class Storage:
 
 
     def add(self, key: str, value: str):
-        if(self.is_storage_full()){
+        if(self.is_storage_full()):
             print("storage is full")
-        }
+        
         self.storage_dict[key] = value
     
 
@@ -35,11 +35,11 @@ class Storage:
     
 
     def is_storage_full(self):
-        if(storage_dict.size() == self.capacity){
-            return true
-        }else {
-            return false
-        }
+        if(self.storage_dict.size() == self.capacity):
+            return True
+        else:
+            return False
+        
 
 
 # not implementing all the methods
@@ -48,19 +48,31 @@ class Storage:
 # simply put the method definition -> and call the method
 
 class DLL:
-
     def __init__(self):
-        self.dll_node = DLLNode()
-    
-    def detach_node(self, node: DLLNode, pos):
-        # remove the node
-        pass
+        self.head = DLLNode(-1,-1)
+        self.tail = DLLNode(-1, -1)
 
-    def attach_node_at_tail_prev(self, node: DLLNode):
+
+    
+    def detach_node(self, node):
+        # remove the node
+        # the node will be remove from next of head
+        node.next.prev = node.prev
+        node.prev.next = node.next
+
+    def attach_node_at_tail_prev(self, node):
         # For better implementation codewise
         # make dummy head and tail nodes
         # add the node before dummy tail
-        pass
+        tail_prev_node = self.tail.prev
+
+        tail_prev_node.next = node
+        node.next = self.tail
+
+        self.tail.prev = node
+        node.prev = tail_prev_node
+
+
     
     # for better implementation code wise
     # making head dummy node and putting the Least Recently Used
@@ -72,14 +84,23 @@ class DLL:
         # For better implementation codewise
         # make dummy head and tail nodes
         # remove the node which is next node of dummy head
-        pass
+        node = self.head.next
+        return node
 
 
 
 class DLLNode:
+    """
+    Class representing the Doubly linklist node
+    DLL Node takes both key and value 
+    """
+    def __init__(self, key: str, val: str):
+        self.key = key
+        self.val = val
+        self.prev = None
+        self.next = None
 
-    def __init__(self):
-        pass
+
 
 from abc import ABC, abstractmethod
 
@@ -103,16 +124,17 @@ class IEvictionPolicy(ABC):
 # Concrete Creator -> Implementation of Creator Interface
 class LRUEvictionPolicy(IEvictionPolicy):
     def __init__(self):
-        # cache elements are stored in the hashmap that we have built earlier in the storage class
+        # cache elements are stored in the hashmap that we have built earlier in the 
+        # storage class
         # now when we want to remove elements from cache -> which element to remove
         # that strategy is impelmented via Doubly LinkList in the LRU Eviction policy
 
         self.dll = DLL()
         self.dll_node = DLLNode()
 
-        # {key: DLLNode}
-        # address mapper of each node
-        # DLLNode object contains address of the node
+        # {key: DLLNodePointer}
+        # address mapper of each node -> reference to each node mapped with key
+        # DLLNodePointer object contains pointer of the node
         # this is made so that -> position of a node -> can be found in O(1) time
         # no need to traverse and search for the node
 
@@ -157,7 +179,11 @@ class LRUEvictionPolicy(IEvictionPolicy):
         elif key not in self.pos_mapper:
             # check if the current size allows addition or need to evict a key
 
-            # Doubt in this ??
+            # Doubt in this ?? 
+            # (In the cache class -> key already put in hashmap of storage class -> 
+            # then `key_accessed` function is called)
+            # So this doubt is almost clear
+
             # there should be also be a code to store the key in the hashmap created in Storage class
             # by checking its size here
             # If key is not present in the cache and we are storing it in the DLL which is implemented
@@ -177,13 +203,15 @@ class LRUEvictionPolicy(IEvictionPolicy):
         Move head
         """
         key = self.dll.get_current_head_next()
+
         # remove the key from the POS mapper
-        pos_mapper.pop(key)
+        self.pos_mapper.pop(key)
 
         # self.dll.move_head()
         
         # same doubt as above
-        # should we not remove the cache element from the hashmap created in the storage class
+        # should we not remove the cache element from the hashmap 
+        # created in the storage class
         
 
 
@@ -215,10 +243,10 @@ class FIFOEvictionPolicy(IEvictionPolicy):
     def evict_key(self):
         # first in first out -> first data that is accessed needs to be removed
         # the node will be inserted in the head and after that
-        key = self.dll.get_current_head()
+        key = self.dll.get_current_head_next()
         # remove the key from the pos mapper as it is no longer in the DLL
         # so no need to store its address
-        pos_mapper.pop(key)
+        self.pos_mapper.pop(key)
         # For better implementation -> head and tail are made as dummy node
         # the head next node will have the first node
         # self.dll.move_head()
@@ -226,14 +254,14 @@ class FIFOEvictionPolicy(IEvictionPolicy):
 
 
 class EvictionPolicyFactory:
-    def __init__(self, policy_val: str):
-        self.policy_val = policy_val
+    def __init__(self):
+        pass
     
 
-    def get_eviction_policy(self):
-        if self.policy_val == "lru":
+    def get_eviction_policy(self, policy_val: str):
+        if policy_val == "lru":
             return LRUEvictionPolicy()
-        elif self.policy_val == "fifo":
+        elif policy_val == "fifo":
             return FIFOEvictionPolicy()
         else:
             # if no policy val corresponding to exisiting policies
@@ -261,10 +289,48 @@ class Cache:
     # need to put values in the cache
     def put(self, key: str, val: str):
         """
-
+        Putting {key, value} in cache
+        i) First check if cache is full or not -> yes then evict key from cache
+        ii) Add key in storage -> if 
         """
         # first check if the storage of the cache is full or not
-        if(self.storage.is_storage_full())
+        if(self.storage.is_storage_full()):
+            # evict a key from the Cache using eviction_policy
+            self.eviction_policy.evict_key()
+        
+        # add the node in the storage class hashamp
+        self.storage.add(key, val)
+
+        # when a value is put then also it is accessed
+        # change the order of keys takes place in 
+        # EvictionPolicy Datastructure using
+        # key_accessed function
+        self.eviction_policy.key_accessed(key)
 
     
+    def get(self, key: str):
+        """Get value for a corresponding key from the cache
+
+        Args:
+            key (str): _description_
+        """
+        value = self.storage.get(key)
+        # when a value is get then also it is accessed
+        self.eviction_policy.key_accessed(key)
+        return value
+
+
+
+# main block of python
+if __name__ == "__main__":
+    print("Ye hain main block, yahaan execution hoga")
+    print("\n")
+    eviction_policy_factory = EvictionPolicyFactory()
+    eviction_policy = eviction_policy_factory.get_eviction_policy("lru")
+    storage_obj = Storage(10)
+    cache_obj = Cache(eviction_policy, storage_obj)
+
+
+
+
 
