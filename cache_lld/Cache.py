@@ -291,12 +291,19 @@ class Cache:
         """
         Putting {key, value} in cache
         i) First check if cache is full or not -> yes then evict key from cache
-        ii) Add key in storage -> if 
+        ii) Add key in storage
+        iii) call the key accessed function as when node is stored 
+        then also it is accessed
         """
         # first check if the storage of the cache is full or not
         if(self.storage.is_storage_full()):
             # evict a key from the Cache using eviction_policy
             self.eviction_policy.evict_key()
+            # DOUBT HERE
+            # once the evict key is called -> node must be evicted from
+            # the DLL
+            # That node exists in the Storage Hashmap
+            # Shouldn't it be removed from there also
         
         # add the node in the storage class hashamp
         self.storage.add(key, val)
@@ -329,8 +336,4 @@ if __name__ == "__main__":
     eviction_policy = eviction_policy_factory.get_eviction_policy("lru")
     storage_obj = Storage(10)
     cache_obj = Cache(eviction_policy, storage_obj)
-
-
-
-
 
