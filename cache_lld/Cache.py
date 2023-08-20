@@ -260,7 +260,11 @@ class Cache:
     
     # need to put values in the cache
     def put(self, key: str, val: str):
-        if(self.storage.)
+        """
+
+        """
+        # first check if the storage of the cache is full or not
+        if(self.storage.is_storage_full())
 
     
 
