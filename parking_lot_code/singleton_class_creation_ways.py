@@ -60,6 +60,10 @@ class Singleton:
 
     def __new__(cls):
         if cls.__instance is None:
+            # every class inherits the object class
+            # so the super() -> will call the object class
+            # super().__new__(cls) -> will give the instance of
+            # the object class
             cls.__instance = super().__new__(cls)
         return cls.__instance
 
