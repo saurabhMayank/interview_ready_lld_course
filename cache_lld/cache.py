@@ -3,7 +3,8 @@
 
 
 # storage is fixed for all types of cache
-# dont need a factory pattern implementation for this
+# dont need a factory pattern implementation for this question
+# but factory can be used for creating different types of storage
 class Storage:
 
     def __init__(self, capacity:int):
