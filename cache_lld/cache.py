@@ -62,6 +62,12 @@ class DLL:
         node.prev.next = node.next
 
     def attach_node_at_tail_prev(self, node):
+        """
+        tail.next = curr
+        curr.prev = tail
+        tail = curr
+        """
+  
         # For better implementation codewise
         # make dummy head and tail nodes
         # add the node before dummy tail
