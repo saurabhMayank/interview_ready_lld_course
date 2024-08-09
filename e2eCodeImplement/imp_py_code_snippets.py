@@ -155,4 +155,18 @@ print(json_data)  # Output: {"name": "Alice", "age": 25, "is_student": true}
 
 
 
+# Design patterns
 
+# singelton class implementation
+class TextEditorSingleton:
+    # class instance
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(TextEditorSingleton, cls).__new__(cls)
+            # Additional initialization can be done here
+        return cls._instance
+
+    def __init__(self):
+        pass
