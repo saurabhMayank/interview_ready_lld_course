@@ -17,6 +17,12 @@ print("100 seconds have passed.")
 time.time()
 
 
+import random
+
+# Generate a random integer between 1 and 10 (inclusive)
+random_integer = random.randint(1, 10)
+print(random_integer)
+
 
 # use of data time library
 from datetime import datetime, timedelta
