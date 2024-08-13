@@ -23,6 +23,13 @@ import random
 random_integer = random.randint(1, 10)
 print(random_integer)
 
+ numbers = []
+    while len(numbers) < k:
+        num = random.randint(1, 6)
+        if num not in numbers:
+            numbers.append(num)
+    return numbers
+
 
 # use of data time library
 from datetime import datetime, timedelta
@@ -157,16 +164,33 @@ print(json_data)  # Output: {"name": "Alice", "age": 25, "is_student": true}
 
 # Design patterns
 
+"""
+The Singleton pattern ensures only one instance of the class exists.
+__new__ controls the creation of the instance, while __init__ ensures that initialization only 
+happens once.
+
+*args, **kwargs -> pass in new to support to any number of args passed due to
+instance instialisation
+
+__init__ will only be called when _initialised attribute not part of self
+rest other times it will not be called
+
+The pattern allows you to pass arguments during the first instantiation, 
+but subsequent instantiations return the same object without reinitializing it.
+"""
+
 # singelton class implementation
-class TextEditorSingleton:
+class DemoSingleton:
     # class instance
     _instance = None
 
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if cls._instance is None:
-            cls._instance = super(TextEditorSingleton, cls).__new__(cls)
+            cls._instance = super(DemoSingleton, cls).__new__(cls)
             # Additional initialization can be done here
         return cls._instance
 
-    def __init__(self):
-        pass
+    def __init__(self, argument):
+        if not hasattr(self, '_initialized'):
+            self.arg = argument
+            self._initialized = True
