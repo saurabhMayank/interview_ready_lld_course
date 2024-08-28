@@ -4,6 +4,43 @@
 if __name__ == "__main__":
   main()
 
+# use class method to access class variable
+"""
+No, you should not use a static method to access or modify class variables. Instead, you should use a class method (@classmethod) for this purpose.
+
+Why Not Use Static Methods for Modifying Class Variables?
+Static Methods Lack Access to Class Context: Static methods do not receive any reference to the class (cls) as the first parameter, which means they do not have direct access to the class attributes or methods. They act like regular functions that happen to be within the class namespace.
+No Access to Class State: Without the cls parameter, static methods cannot access or modify class-level variables. You would have to reference the class name explicitly, which is less flexible and not suitable for inheritance.
+Use Class Methods to Access and Modify Class Variables
+Class methods are designed to operate on the class itself rather than on an instance of the class. They receive the class (cls) as the first argument, allowing them to access and modify class variables.
+"""
+class Example:
+    class_variable = 0
+
+    @classmethod
+    def increment_class_variable(cls):
+        cls.class_variable += 1
+
+    @classmethod
+    def set_class_variable(cls, value):
+        cls.class_variable = value
+
+    @classmethod
+    def get_class_variable(cls):
+        return cls.class_variable
+
+# Example usage
+print(Example.get_class_variable())  # Outputs: 0
+
+Example.increment_class_variable()
+print(Example.get_class_variable())  # Outputs: 1
+
+Example.set_class_variable(10)
+print(Example.get_class_variable())  # Outputs: 10
+
+
+
+
 
 # time library
 import time
