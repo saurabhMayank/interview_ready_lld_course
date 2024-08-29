@@ -12,6 +12,8 @@ class UserModel:
         self.email = email
 
     @classmethod
+    # only do this if interviewer tells to demo
+    # some features and time is left
     def add_user_to_list(cls, user_obj):
         cls.user_list.append(user_obj)
 
