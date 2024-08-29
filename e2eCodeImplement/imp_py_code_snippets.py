@@ -231,3 +231,82 @@ class DemoSingleton:
         if not hasattr(self, '_initialized'):
             self.arg = argument
             self._initialized = True
+
+
+
+# Decorator Pattern
+
+from abc import ABC, abstractmethod
+
+# Component Interface
+class Coffee(ABC):
+    @abstractmethod
+    def cost(self) -> float:
+        pass
+
+    @abstractmethod
+    def description(self) -> str:
+        pass
+
+# Concrete Component
+class SimpleCoffee(Coffee):
+    def cost(self) -> float:
+        return 5.0  # Base price for simple coffee
+
+    def description(self) -> str:
+        return "Simple Coffee"
+
+
+# Decorator base class
+class CoffeeDecorator(Coffee):
+    def __init__(self, coffee: Coffee):
+        self._coffee = coffee
+
+    def cost(self) -> float:
+        return self._coffee.cost()
+
+    def description(self) -> str:
+        return self._coffee.description()
+
+
+# Concrete Decorators
+class MilkDecorator(CoffeeDecorator):
+    def cost(self) -> float:
+        return self._coffee.cost() + 1.5  # Additional cost for milk
+
+    def description(self) -> str:
+        return self._coffee.description() + ", Milk"
+
+class SugarDecorator(CoffeeDecorator):
+    def cost(self) -> float:
+        return self._coffee.cost() + 0.5  # Additional cost for sugar
+
+    def description(self) -> str:
+        return self._coffee.description() + ", Sugar"
+
+class VanillaDecorator(CoffeeDecorator):
+    def cost(self) -> float:
+        return self._coffee.cost() + 2.0  # Additional cost for vanilla syrup
+
+    def description(self) -> str:
+        return self._coffee.description() + ", Vanilla"
+
+# Create a simple coffee
+coffee = SimpleCoffee()
+print(coffee.description())  # Outputs: Simple Coffee
+print(coffee.cost())  # Outputs: 5.0
+
+# Add milk to the coffee
+coffee_with_milk = MilkDecorator(coffee)
+print(coffee_with_milk.description())  # Outputs: Simple Coffee, Milk
+print(coffee_with_milk.cost())  # Outputs: 6.5
+
+# Add sugar to the coffee with milk
+coffee_with_milk_and_sugar = SugarDecorator(coffee_with_milk)
+print(coffee_with_milk_and_sugar.description())  # Outputs: Simple Coffee, Milk, Sugar
+print(coffee_with_milk_and_sugar.cost())  # Outputs: 7.0
+
+# Add vanilla to the coffee with milk and sugar
+coffee_with_everything = VanillaDecorator(coffee_with_milk_and_sugar)
+print(coffee_with_everything.description())  # Outputs: Simple Coffee, Milk, Sugar, Vanilla
+print(coffee_with_everything.cost())  # Outputs: 9.0
