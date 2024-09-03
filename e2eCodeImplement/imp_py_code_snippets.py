@@ -310,3 +310,11 @@ print(coffee_with_milk_and_sugar.cost())  # Outputs: 7.0
 coffee_with_everything = VanillaDecorator(coffee_with_milk_and_sugar)
 print(coffee_with_everything.description())  # Outputs: Simple Coffee, Milk, Sugar, Vanilla
 print(coffee_with_everything.cost())  # Outputs: 9.0
+
+
+
+# Good Error handling mechanism to use in Python
+
+raise ValueError -> when proper values are not passed in the argument
+raise IndexError -> when trying to access an invalid index
+raise SyntaxError -> for invalid syntaxes
