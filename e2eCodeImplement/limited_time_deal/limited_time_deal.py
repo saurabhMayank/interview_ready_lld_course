@@ -57,6 +57,7 @@ class DealsModel:
         DealsModel.total_deals_list.append(deals_obj)
 
 
+
 class UserModel:
     def __init__(self, name: str, email: str):
         self.id = time.time()
@@ -392,7 +393,6 @@ def main():
 
     print("\n")
     api_handler.claim_deal(user3_obj, deals1_obj)
-
 
 
 if __name__ == "__main__":
