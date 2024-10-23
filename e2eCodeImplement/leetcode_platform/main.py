@@ -146,6 +146,19 @@ class Question:
   def add_question_data(cls, question):
     cls.question_data.append(question)
   
+  def get_all_ques(cls):
+    return cls.question_data
+  
+  def filter_ques_by_difficulty(cls, difficulty_level):
+    ques_list = []
+    for ques in question_data:
+      if ques.difficulty_level == difficulty_level:
+        ques_list.append(ques)
+    
+    return ques_list
+
+
+  
   def change_question_level(cls, question, level):
     for ques in question_data:
       if ques.id == queston.id:
@@ -210,8 +223,17 @@ class QuestionService:
   def __init__(self):
     pass
   
-  def add_question(self, difficulty_level: LEVEL):
-    ques = Question()
+  def add_question(self,name, difficulty_level: LEVEL, marks):
+    ques = Question(name, difficulty_level, marks)
+    Question.add_question_data(ques)
+    return ques
+  
+  def filter_queslist_by_difficulty(self, difficulty_level):
+    return Question.filter_ques_by_difficulty(difficulty_level)
+
+  
+
+
   
 
 
