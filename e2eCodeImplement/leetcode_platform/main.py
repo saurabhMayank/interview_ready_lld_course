@@ -7,9 +7,17 @@ Models
 """
 
 class LEVEL(Enum):
-    LOW = 1
-    MEDIUM = 2
-    HARD = 3
+
+  LOW = 1
+  MEDIUM = 2
+  HARD = 3
+
+class STATUS(Enum):
+  STARTED = 1
+  ONGOING = 2
+  ENDED = 2
+
+
 
 class User:
   users_data = []
@@ -34,10 +42,11 @@ class User:
 class Contest:
   contest_data = []
 
-  def __init__(self, name: str, level: ):
+  def __init__(self, name: str, level:LEVEL, status:  ):
     self.id = time.time()
     self.name = name
-    self.level 
+    self.level = level
+    self.status = 
 
 
 """
