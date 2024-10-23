@@ -39,6 +39,26 @@ Example.set_class_variable(10)
 print(Example.get_class_variable())  # Outputs: 10
 
 
+"""
+Generating auto increment Ids
+"""
+class Question:
+  # question number should auto increment
+  question_data = []
+  current_id = 0
+
+  def __init__(self, name, level, marks):
+    self.id = Question._generate_id()
+    self.name = name
+    self.level = level
+    self.marks = marks
+
+
+  @classmethod
+  def _generate_id(cls):
+    # Auto-increment the ID
+    cls.current_id += 1
+    return cls.current_id
 
 
 
