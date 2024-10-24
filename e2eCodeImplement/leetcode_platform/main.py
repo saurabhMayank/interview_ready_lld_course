@@ -11,6 +11,8 @@ This link has the complete requirements
 
 
 import time
+from enum import Enum
+from abc import ABC, abstractmethod
 
 
 """
@@ -38,12 +40,14 @@ class User:
     self.name = name
     self.total_score = 0
   
+  @classmethod
   def add_new_user(cls, user):
     """
     Add new user to user_data
     """
-    cls.user_data.append(user)
+    cls.users_data.append(user)
   
+  @classmethod
   def update_user_score(cls, user, new_score):
     for user_val in users_data:
       if user_val.id == user.id:
@@ -70,13 +74,14 @@ class Contest:
     cls.current_id += 1
     return cls.current_id
 
-  
+  @classmethod
   def add_new_contest(cls, contest):
     """
     Add new contest
     """
     cls.contest_data.append(contest)
-  
+
+  @classmethod
   def update_contest_level(cls, contest, level):
     for contest_obj in cls.contest_data:
       if contest_obj.id == contest.id:
@@ -85,7 +90,8 @@ class Contest:
         break
     
     return contest
-  
+
+  @classmethod
   def update_contest_status(cls, contest, status):
     for contest_obj in cls.contest_data:
       if contest_obj.id == contest.id:
@@ -95,10 +101,11 @@ class Contest:
     
     return contest
 
+  @classmethod
   def filter_contest_by_difficulty(cls, difficulty_level):
     contest_list = []
     for cont in cls.contest_data:
-      if cont.difficulty_level == difficulty_level:
+      if cont.level == difficulty_level:
         contest_list.append(cont)
     
     return contest_list
@@ -111,9 +118,11 @@ class UserContest:
     self.user = user
     self.contest = contest
   
+  @classmethod
   def add_user_contest_data(cls, user_contest):
     cls.user_contest_data.append(user_contest)
 
+  @classmethod
   def get_user_contest_by_user(cls, user):
     user_cont_list = []
     for user_contest in user_contest_data:
@@ -122,7 +131,7 @@ class UserContest:
     
     return user_cont_list
   
-
+  @classmethod
   def get_user_contest_by_contest(cls, contest):
     user_cont_list = []
     for user_contest in user_contest_data:
@@ -150,23 +159,25 @@ class Question:
     cls.current_id += 1
     return cls.current_id
   
-  
+  @classmethod
   def add_question_data(cls, question):
     cls.question_data.append(question)
   
+  @classmethod
   def get_all_ques(cls):
     return cls.question_data
   
+  @classmethod
   def filter_ques_by_difficulty(cls, difficulty_level):
     ques_list = []
-    for ques in question_data:
-      if ques.difficulty_level == difficulty_level:
+    for ques in cls.question_data:
+      if ques.level == difficulty_level:
         ques_list.append(ques)
     
     return ques_list
 
 
-  
+  @classmethod
   def change_question_level(cls, question, level):
     for ques in question_data:
       if ques.id == queston.id:
@@ -184,11 +195,11 @@ class ContestQuestion:
     self.question = question
     self.contest = contest
   
-
+  @classmethod
   def add_contest_ques_data(cls, contest_ques):
     cls.contest_ques.append(contest_ques)
 
-  
+  @classmethod
   def get_contest_ques_by_ques(cls, question):
     cont_ques = []
     for contest_ques in cls.contest_ques_data:
@@ -197,6 +208,7 @@ class ContestQuestion:
     
     return cont_ques
   
+  @classmethod
   def get_contest_ques_by_contest(cls, contest):
     cont_ques = []
     for contest_ques in cls.contest_ques_data:
@@ -228,10 +240,10 @@ class ContestService:
   def __init__(self):
     pass
   
-  def create_contest(self, contest_name, contest_lvl: Level, contest_creator):
+  def create_contest(self, contest_name, contest_lvl: LEVEL, contest_creator):
 
     # create contest model
-    contest_model = Contest(name, contest_lvl)
+    contest_model = Contest(contest_name, contest_lvl)
 
     Contest.add_new_contest(contest_model)
 
@@ -244,7 +256,7 @@ class ContestService:
     return contest_model
 
 
-  def list_contest(self, contest_lvl: Level):
+  def list_contest(self, contest_lvl: LEVEL):
     return Contest.filter_contest_by_difficulty(contest_lvl)
 
 
@@ -276,13 +288,77 @@ class QuestionService:
 Api Handler
 """
 
+class ApiHandler:
+    def __init__(self):
+      pass
+    
+    def create_user(self, name):
+      user_service = UserService()
+      user_obj = user_service.add_user(name)
+      return user_obj
+    
+    def create_question(self, name, level, marks):
+      ques_service = QuestionService()
+      ques_obj = ques_service.add_question(name, level, marks)
+      return ques_obj
+    
+    def list_question(self, level):
+      ques_service = QuestionService()
+      ques_list = ques_service.filter_queslist_by_difficulty(level)
+      return ques_list
+    
+
+    def create_contest(self, name, level, user):
+      contest_service = ContestService()
+      contest = contest_service.create_contest(name, level, user)
+      return contest
+    
+    def list_contest(self, level):
+      contest_service = ContestService()
+      contest = contest_service.list_contest(level)
+      return contest
+
+    
+
 
 
 """
 Main function
 """
 
+def main():
+  """
+  """
+  api_handler = ApiHandler()
+  user = api_handler.create_user("Mayank")
+  print(f"User created: {user.name}")
 
+  print("---------------------------------------------")
+
+  question = api_handler.create_question("ques1", LEVEL.LOW, 10)
+  print(f"question created: {question.name}")
+
+  print("----------------------------------------------")
+  question_list = api_handler.list_question(LEVEL.LOW)
+  print(f"question list: {question_list}")
+  for ques in question_list:
+    print(ques.name)
+
+  print("----------------------------------------------")
+  contest = api_handler.create_contest("contest1", LEVEL.LOW, user)
+  print(f"contest: ", contest)
+
+  print("-----------------------------------------------")
+
+  contest_list = api_handler.list_contest(LEVEL.LOW)
+  print(f"contest_list: {contest_list}")
+
+
+
+  # create user
+
+
+# /workspaces/interview_ready_lld_course
 
 
 if __name__ == "__main__":
