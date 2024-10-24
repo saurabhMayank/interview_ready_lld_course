@@ -24,9 +24,10 @@ class LEVEL(Enum):
   HARD = 3
 
 class CONTEST_STATUS(Enum):
-  STARTED = 1
-  ONGOING = 2
-  ENDED = 2
+  CREATED = 1
+  STARTED = 2
+  ONGOING = 3
+  ENDED = 4
 
 
 
@@ -57,11 +58,11 @@ class Contest:
   contest_data = []
   current_id = 0
 
-  def __init__(self, name: str, level:LEVEL, status: CONTEST_STATUS ):
+  def __init__(self, name: str, level:LEVEL ):
     self.id = Contest._generate_id()
     self.name = name
     self.level = level
-    self.status = status
+    self.status = CONTEST_STATUS.CREATED
   
   @classmethod
   def _generate_id(cls):
@@ -94,6 +95,13 @@ class Contest:
     
     return contest
 
+  def filter_contest_by_difficulty(cls, difficulty_level):
+    contest_list = []
+    for cont in cls.contest_data:
+      if cont.difficulty_level == difficulty_level:
+        contest_list.append(cont)
+    
+    return contest_list
 
 class UserContest:
   user_contest_data = []
@@ -217,7 +225,33 @@ class UserService:
 
 
 class ContestService:
-  pass
+  def __init__(self):
+    pass
+  
+  def create_contest(self, contest_name, contest_lvl: Level, contest_creator):
+
+    # create contest model
+    contest_model = Contest(name, contest_lvl)
+
+    Contest.add_new_contest(contest_model)
+
+    # create user<>contest model
+    # contest creator will definitely attend the contest
+    user_contest_model = UserContest(contest_creator, contest_model)
+
+    UserContest.add_user_contest_data(user_contest_model)
+
+    return contest_model
+
+
+  def list_contest(self, contest_lvl: Level):
+    return Contest.filter_contest_by_difficulty(contest_lvl)
+
+
+
+
+
+
 
 class QuestionService:
   def __init__(self):
