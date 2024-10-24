@@ -249,6 +249,7 @@ class ContestService:
 
     # create user<>contest model
     # contest creator will definitely attend the contest
+    # so when contest is created at that time only add contest_creator to contest
     user_contest_model = UserContest(contest_creator, contest_model)
 
     UserContest.add_user_contest_data(user_contest_model)
@@ -258,6 +259,29 @@ class ContestService:
 
   def list_contest(self, contest_lvl: LEVEL):
     return Contest.filter_contest_by_difficulty(contest_lvl)
+
+  
+  def attend_contest(self, user, contest):
+    user_contest_model = UserContest(contest_creator, contest_model)
+
+    UserContest.add_user_contest_data(user_contest_model)
+
+
+# functionalities left -> figure these out in the morning
+
+
+
+# run contest
+# before starting the contest -> randomly questions are assigned to users in contest
+
+# add question to contest -> question will be added in random fashion
+# will depend on difficulty level of the contest
+
+# start the contest and see questions solved by the user and put score
+
+
+# leaderboard
+# display leaderboard of the users -> based on their score
 
 
 
