@@ -140,6 +140,32 @@ class UserContest:
     
     return user_cont_list
 
+# question around Question
+# If two admins are trying to create question simultaenously
+# then how to handle concurrency as both will be assigned same Ids
+# in that we will say that -> system initially will not have much scale
+# so at a time only 1 admin will be able to insert question in DB
+# and DB will be locked till the transaction is completed
+
+
+# lets say there are lot of questions in the DB for a difficulty level
+# how would make the application fast as you require only 10 questions
+
+# you can make an evaluation model in the backend -> to select 10 questions based on parameter randomly
+
+# for large response -> before sending in the request -> Paginate the response
+
+
+# very imp point -> marks should not be assigned to the question -> when creating the question
+
+# When you run the contest -> then basically in what scenario the contest is being held 
+# that should determine what marks to be allocated to each question
+
+# for example contest can be for experienced professionals or for freshers or for Interns
+# in that case for each scenario different marks will be allocated to the same question based on scenario
+
+
+
 
 class Question:
   # question number should auto increment
