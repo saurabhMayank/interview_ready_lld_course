@@ -262,9 +262,12 @@ class ContestService:
 
   
   def attend_contest(self, user, contest):
-    user_contest_model = UserContest(contest_creator, contest_model)
+    user_contest_model = UserContest(user, contest)
 
     UserContest.add_user_contest_data(user_contest_model)
+  
+  def run_contest(self):
+    pass
 
 
 # functionalities left -> figure these out in the morning
@@ -304,9 +307,6 @@ class QuestionService:
   
 
 
-  
-
-
 
 """
 Api Handler
@@ -342,7 +342,8 @@ class ApiHandler:
       contest = contest_service.list_contest(level)
       return contest
 
-    
+    def run_contest(self):
+      pass
 
 
 
@@ -354,13 +355,26 @@ def main():
   """
   """
   api_handler = ApiHandler()
-  user = api_handler.create_user("Mayank")
-  print(f"User created: {user.name}")
+  user1 = api_handler.create_user("Mayank")
+  print(f"User 1 created: {user1.name}")
+
+  user2 = api_handler.create_user("Saurabh")
+  print(f"User 2 created: {user2.name}")
+
 
   print("---------------------------------------------")
 
-  question = api_handler.create_question("ques1", LEVEL.LOW, 10)
-  print(f"question created: {question.name}")
+  question1 = api_handler.create_question("ques1", LEVEL.LOW, 10)
+  print(f"question created: {question1.name}")
+
+  question2 = api_handler.create_question("ques2", LEVEL.LOW, 20)
+  print(f"question created: {question2.name}")
+
+  question3 = api_handler.create_question("ques3", LEVEL.LOW, 30)
+  print(f"question created: {question3.name}")
+
+  question4 = api_handler.create_question("ques4", LEVEL.HARD, 25)
+  print(f"question created: {question4.name}")
 
   print("----------------------------------------------")
   question_list = api_handler.list_question(LEVEL.LOW)
@@ -368,14 +382,14 @@ def main():
   for ques in question_list:
     print(ques.name)
 
-  print("----------------------------------------------")
-  contest = api_handler.create_contest("contest1", LEVEL.LOW, user)
-  print(f"contest: ", contest)
+  # print("----------------------------------------------")
+  # contest = api_handler.create_contest("contest1", LEVEL.LOW, user)
+  # print(f"contest: ", contest)
 
-  print("-----------------------------------------------")
+  # print("-----------------------------------------------")
 
-  contest_list = api_handler.list_contest(LEVEL.LOW)
-  print(f"contest_list: {contest_list}")
+  # contest_list = api_handler.list_contest(LEVEL.LOW)
+  # print(f"contest_list: {contest_list}")
 
 
 
