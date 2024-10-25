@@ -27,7 +27,7 @@ class LEVEL(Enum):
 
 class CONTEST_STATUS(Enum):
   CREATED = 1
-  STARTED = 2
+  INITIALISED = 2
   ONGOING = 3
   ENDED = 4
 
@@ -158,13 +158,19 @@ class UserContest:
 
 # very imp point -> marks should not be assigned to the question -> when creating the question
 
+# loose coupling of question and marks -> Decided on Runtime
+
 # When you run the contest -> then basically in what scenario the contest is being held 
 # that should determine what marks to be allocated to each question
 
 # for example contest can be for experienced professionals or for freshers or for Interns
 # in that case for each scenario different marks will be allocated to the same question based on scenario
 
+# In the question -> there should also be possible testcases to evaluate candidate in interview
+# where will you store the testcases
 
+# testcases can be stored as a document in a file storage like S3 and its link can be put in a column 
+# in the table
 
 
 class Question:
@@ -313,7 +319,23 @@ class ContestService:
 # display leaderboard of the users -> based on their score
 
 
+# Thought process of Run contest
+# It will like a workflow -> where the contest entity will transition from 1 state to another
+# Before contest starts -> Contest is in Created status
 
+# When Contest runs -> Contest is in Initialisation status -> Contest 
+# Randomly picked questions from the DB based on difficulty level of the contest
+# questions are randomly assigned to the users
+
+# contest is ready to start
+
+# When contest is started -> Users have logged in -> Contest goes in Ongoing state
+
+# after the time of contest has ended -> Contest goes in End State
+
+# marks of Users are calculated based on questions they have solved
+
+# marks for the users are updated in the DB
 
 
 
